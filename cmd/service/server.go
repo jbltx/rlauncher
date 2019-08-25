@@ -110,7 +110,7 @@ func handleChannels(chans <-chan ssh.NewChannel) {
 					command := string(req.Payload[4 : req.Payload[3]+4])
 					log.Printf("-> Request Exec Payload : %s", command)
 
-					windowsCmd := []string{"/K", command + " && exit"}
+					windowsCmd := []string{"/K", command}
 					unixCmd := []string{"-c", command}
 
 					var cmd *exec.Cmd

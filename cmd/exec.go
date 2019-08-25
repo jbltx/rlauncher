@@ -45,7 +45,7 @@ func execOnServers(cmd *cobra.Command, args []string) {
 	exec, _ := cmd.Flags().GetString("command")
 
 	for _, addr := range adresses {
-		sendExecToServer(exec, addr, config)
+		sendExecToServer(exec+"\n", addr, config)
 	}
 
 }
