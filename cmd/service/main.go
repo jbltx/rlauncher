@@ -11,7 +11,6 @@ func newService(cmd *cobra.Command) (svc.Service, error) {
 
 	port, _ := cmd.Flags().GetInt("port")
 	nodisco, _ := cmd.Flags().GetBool("no-discovery")
-	discoPort, _ := cmd.Flags().GetInt("discovery-port")
 
 	svcConfig := &svc.Config{
 		Name:        "rLauncherService",
@@ -22,9 +21,8 @@ func newService(cmd *cobra.Command) (svc.Service, error) {
 
 	server := &rLauncherServer{
 		Config: &serverConfig{
-			Port:          port,
-			DiscoveryPort: discoPort,
-			UseDiscovery:  !nodisco,
+			Port:         port,
+			UseDiscovery: !nodisco,
 		},
 	}
 
@@ -87,7 +85,6 @@ Uninstall the application as a Service (Windows, Linux and OSX compatible)
 
 	runCmd.Flags().IntP("port", "p", 22000, "The port to listen to")
 	runCmd.Flags().Bool("no-discovery", false, "Do not install the discovery service")
-	runCmd.Flags().Int("discovery-port", 42424, "The port used by the discovery service")
 
 	return serviceCmd
 }

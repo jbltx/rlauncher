@@ -15,9 +15,8 @@ import (
 )
 
 type serverConfig struct {
-	Port          int
-	DiscoveryPort int
-	UseDiscovery  bool
+	Port         int
+	UseDiscovery bool
 }
 
 type rLauncherServer struct {
@@ -149,6 +148,8 @@ func (server *rLauncherServer) Stop(s svc.Service) error {
 	if server.Config.UseDiscovery && server.Discovery != nil {
 		server.Discovery.Shutdown()
 	}
+
+	server.SSHListener.Close()
 
 	return nil
 }
