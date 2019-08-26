@@ -130,9 +130,16 @@ func execOnServers(cmd *cobra.Command, args []string) {
 			log.Fatalf("unable to parse private key: %v", err)
 		}*/
 
-	// TODO : Get the list of servers using disco
+	hosts, _ := cmd.Flags().GetStringSlice("hosts")
 
-	hosts := []string{"127.0.0.1:22000"}
+	if len(hosts) == 0 {
+		panic("You need to provide a valid list of hosts")
+	}
+
+	if len(hosts) == 1 && hosts[0] == "*" {
+		// TODO : Get the list of servers using disco
+		hosts = []string{}
+	}
 
 	exec, _ := cmd.Flags().GetString("command")
 

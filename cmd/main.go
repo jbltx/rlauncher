@@ -35,6 +35,7 @@ func Execute() {
 	// TODO : Add filters as arguments in the EXEC command line
 	// execCmd.Flags().Int()
 	execCmd.Flags().StringP("command", "c", "echo hello world !", "The command to execute remotely")
+	execCmd.Flags().StringSlice("hosts", []string{"*"}, "The hosts which will execute the command")
 
 	rootCmd.AddCommand(listCmd)
 	rootCmd.AddCommand(execCmd)
