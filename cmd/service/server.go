@@ -1,12 +1,16 @@
 package service
 
 import (
+	"bytes"
+	"encoding/binary"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net"
 	"os/exec"
 	"runtime"
+	"syscall"
 
 	"github.com/grandcat/zeroconf"
 	svc "github.com/kardianos/service"
@@ -40,11 +44,13 @@ func (server *rLauncherServer) run() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		log.Printf("Discovery service started for rLauncher at port %d", server.Config.Port)
 	}
 
 	server.SSHConfig = &ssh.ServerConfig{
 		PasswordCallback: func(c ssh.ConnMetadata, pass []byte) (*ssh.Permissions, error) {
-			log.Printf("User : %s / %s", c.User(), pass)
+			// TODO : Handle permissions
+			log.Printf("User %s is asking for connection... OK", c.User())
 			return nil, nil
 		},
 	}
@@ -63,6 +69,8 @@ func (server *rLauncherServer) run() {
 	if err != nil {
 		log.Fatalf("Failed to listen on %d (%s)", server.Config.Port, err)
 	}
+	log.Printf("Custom SSH Server is listening at port %d", server.Config.Port)
+	log.Printf("Waiting for connections...")
 
 	for {
 		tcpConn, err := server.SSHListener.Accept()
@@ -77,15 +85,13 @@ func (server *rLauncherServer) run() {
 		}
 		log.Printf("New SSH connection from %s (%s)", sshConn.RemoteAddr(), sshConn.ClientVersion())
 		go ssh.DiscardRequests(reqs)
-		go handleChannels(chans)
+		go handleChannels(chans, sshConn)
 	}
 }
 
-func handleChannels(chans <-chan ssh.NewChannel) {
+func handleChannels(chans <-chan ssh.NewChannel, conn *ssh.ServerConn) {
 	// Service the incoming Channel channel in go routine
 	for newChannel := range chans {
-		log.Printf("Channel type : %s", newChannel.ChannelType())
-
 		if t := newChannel.ChannelType(); t != "session" {
 			newChannel.Reject(ssh.UnknownChannelType, fmt.Sprintf("unknown channel type: %s", t))
 			continue
@@ -96,18 +102,18 @@ func handleChannels(chans <-chan ssh.NewChannel) {
 			continue
 		}
 
-		go func(in <-chan *ssh.Request) {
-			for req := range in {
-				log.Printf("-> Request Type : %s", req.Type)
+		go func(reqs <-chan *ssh.Request) {
+
+			defer channel.Close()
+
+			for req := range reqs {
 
 				ok := false
 
 				switch req.Type {
 				case "exec":
 					ok = true
-
 					command := string(req.Payload[4 : req.Payload[3]+4])
-					log.Printf("-> Request Exec Payload : %s", command)
 
 					windowsCmd := []string{"/K", command}
 					unixCmd := []string{"-c", command}
@@ -121,26 +127,50 @@ func handleChannels(chans <-chan ssh.NewChannel) {
 					}
 					cmd.Stdout = channel
 					cmd.Stderr = channel
+					//cmd.Stdin = channel
+
+					log.Printf("Executing command : `%s`", command)
 
 					err = cmd.Start()
 					if err != nil {
-						log.Fatalf("could not run command (%s)", err)
+						log.Fatalf("Failed to start command : %v", err)
 					}
 
 					// teardown session
 					go func() {
 						_, err := cmd.Process.Wait()
 						if err != nil {
-							log.Printf("failed to exit bash (%s)", err)
+							log.Printf("Command failed : %v", err)
+							existStatus := 99
+
+							if exiterr, ok := err.(*exec.ExitError); ok {
+								if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
+									existStatus = status.ExitStatus()
+								}
+							}
+
+							statusBuf := new(bytes.Buffer)
+							binary.Write(statusBuf, binary.LittleEndian, existStatus)
+							channel.SendRequest("exit-status", false, statusBuf.Bytes())
+
+						} else {
+							log.Print("Command succeed !")
+							channel.SendRequest("exit-status", false, []byte{0, 0, 0, 0})
 						}
+						log.Print("Closing connection...")
 						channel.Close()
-						log.Printf("session closed")
 					}()
+				default:
+					log.Printf("Unsupported request : %s", req.Type)
 				}
 
 				req.Reply(ok, nil)
 			}
 		}(requests)
+	}
+
+	if err := conn.Wait(); err != io.EOF {
+		log.Printf("Connection lost: %v", err)
 	}
 }
 
