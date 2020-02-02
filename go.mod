@@ -45,6 +45,7 @@ require (
 	golang.org/x/image v0.0.0-20190823064033-3a9bac650e44 // indirect
 	golang.org/x/mobile v0.0.0-20190823173732-30c70e3810e9 // indirect
 	golang.org/x/net v0.0.0-20190813141303-74dc4d7220e7 // indirect
+	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
 	golang.org/x/sys v0.0.0-20190813064441-fde4db37ae7a // indirect
 	golang.org/x/text v0.3.2
 	golang.org/x/tools v0.0.0-20190823170909-c4a336ef6a2f // indirect

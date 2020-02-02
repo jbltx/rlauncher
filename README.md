@@ -1,13 +1,12 @@
 # rLauncher - Job Scheduler over gRPC ![Go](https://github.com/jbltx/rlauncher/workflows/Go/badge.svg)
 
----
-
 > This is a work in progress
 
 ## Features
 
  - [ ] Manage Jobs, Tasks and Agents from the built-in TUI Monitor
  - [ ] Easy to setup with simple command prompts
+ - [ ] Agent discovery using [Zeroconf](https://fr.wikipedia.org/wiki/Zeroconf)
  - [ ] Scheduler ⇄ Agent communication with [gRPC](https://grpc.io/) and [protocol buffers](https://developers.google.com/protocol-buffers)
  - [ ] Spread a single Job in several smart Tasks
  - [ ] Group similar agents using Pools
@@ -23,6 +22,7 @@
 - [ ] Webhooks
 - [ ] [MongoDB](https://www.mongodb.com/) support
 - [ ] [RBAC](https://en.wikipedia.org/wiki/Role-based_access_control) for Users
+- [ ] Others authentication providers (LDAP/ActiveDirectory)
 
 ## How it works
 
@@ -72,29 +72,31 @@ Add your issue here on GitHub. Feel free to get in touch if you have any questio
 
 ## Contribution
 
+[TODO]
+
 ## Dependencies
 
-### Configuration
+##### Configuration
 * [viper](https://github.com/spf13/viper)
 * [cobra](https://github.com/spf13/cobra)
 
-### OS (Services, Filesystem...)
+##### OS (Services, Filesystem...)
 * [afero](https://github.com/spf13/afero)
 * [service](https://github.com/kardianos/service)
 
-### Communication
+##### Communication
 * [crypto/ssh](https://golang.org/x/crypto/ssh)
 * [zeroconf](https://github.com/grandcat/zeroconf)
 
-### Database
+##### Database
 * [gorm](https://github.com/jinzhu/gorm)
 * [go.uuid](https://github.com/satori/go.uuid)
 
-### TUI
+##### TUI
 * [tcell](https://github.com/gdamore/tcell)
 * [tview](https://github.com/rivo/tview)
 * [termui](https://github.com/gizak/termui)
 * [promptui](https://github.com/manifoldco/promptui)
 
-### Security
+##### Security
 * [auth](https://github.com/qor/auth)

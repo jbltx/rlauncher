@@ -17,29 +17,29 @@ type userRepository interface {
 
 // Service ...
 type Service struct {
-	cfg        *cfg.Config
+	appCfg     *cfg.Config
 	repository *userRepository
 }
 
 // NewService ...
-func NewService(cfg *cfg.Config) *Service {
+func NewService(appConfig *cfg.Config) *Service {
 
 	// init repository
 	var repo userRepository
-	switch cfg.Database.Type {
+	switch appConfig.Database.Type {
 	case "mysql":
 	case "postgres":
 	case "sqlite3":
-		repo = repository.NewGormRepository(cfg)
+		repo = repository.NewGormRepository(appConfig)
 	default:
-		panic(fmt.Sprintf("Invalid database type: '%s'", cfg.Database.Type))
+		panic(fmt.Sprintf("Invalid database type: '%s'", appConfig.Database.Type))
 	}
 
 	// init deliveries
-	// [todo]
+	// [TODO]
 
 	return &Service{
-		cfg:        cfg,
+		appCfg:     appConfig,
 		repository: &repo,
 	}
 }
