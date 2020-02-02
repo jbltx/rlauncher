@@ -2,41 +2,35 @@ package user
 
 import (
 	"github.com/jbltx/rlauncher/cfg"
-	repoPkg "github.com/jbltx/rlauncher/user/repository"
+	"github.com/jbltx/rlauncher/user/model"
+	"github.com/jbltx/rlauncher/user/repository"
 
 	"fmt"
 )
 
-// User ...
-type User struct {
-	cfg.BaseModel
-	Email string `json:"email" gorm:"type:varchar(100);unique_index"`
-	Name  string `json:"name" gorm:"type:varchar(100);not null"`
-}
-
-type repository interface {
-	GetByID(uuid string) (*User, error)
-	Delete(user *User) error
-	Create(user *User) (*User, error)
-	Update(user *User) error
+type userRepository interface {
+	GetByID(uuid string) (*model.User, error)
+	Delete(user *model.User) error
+	Create(user *model.User) (*model.User, error)
+	Update(user *model.User) error
 }
 
 // Service ...
 type Service struct {
 	cfg        *cfg.Config
-	repository *repository
+	repository *userRepository
 }
 
 // NewService ...
 func NewService(cfg *cfg.Config) *Service {
 
 	// init repository
-	var repo repository
+	var repo userRepository
 	switch cfg.Database.Type {
 	case "mysql":
 	case "postgres":
 	case "sqlite3":
-		repo = repoPkg.NewGormRepository(cfg)
+		repo = repository.NewGormRepository(cfg)
 	default:
 		panic(fmt.Sprintf("Invalid database type: '%s'", cfg.Database.Type))
 	}

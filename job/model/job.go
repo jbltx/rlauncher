@@ -1,11 +1,11 @@
-package job
+package model
 
 import (
 	"time"
 
-	pool "github.com/jbltx/rlauncher/pool"
-	task "github.com/jbltx/rlauncher/task"
-	user "github.com/jbltx/rlauncher/user"
+	pool "github.com/jbltx/rlauncher/pool/model"
+	task "github.com/jbltx/rlauncher/task/model"
+	user "github.com/jbltx/rlauncher/user/model"
 )
 
 // Job ...

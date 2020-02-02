@@ -1,9 +1,9 @@
-package agent
+package model
 
 import (
 	"time"
 
-	user "github.com/jbltx/rlauncher/user"
+	user "github.com/jbltx/rlauncher/user/model"
 )
 
 // Status ...

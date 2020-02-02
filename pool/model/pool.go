@@ -1,6 +1,6 @@
-package pool
+package model
 
-import "github.com/jbltx/rlauncher/agent"
+import "golang.org/x/crypto/ssh/agent"
 
 // Type defines the type of a Pool instance
 type Type uint8

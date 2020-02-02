@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/jbltx/rlauncher/cfg"
-	"github.com/jbltx/rlauncher/user"
+	"github.com/jbltx/rlauncher/user/model"
 	"github.com/jinzhu/gorm"
 )
 
@@ -21,21 +21,21 @@ func NewGormRepository(cfg *cfg.Config) *GormRepository {
 }
 
 // GetByID ...
-func (repo *GormRepository) GetByID(uuid string) (*user.User, error) {
+func (repo *GormRepository) GetByID(uuid string) (*model.User, error) {
 	return nil, errors.New("Nothing here")
 }
 
 // Delete ...
-func (repo *GormRepository) Delete(user *user.User) error {
+func (repo *GormRepository) Delete(user *model.User) error {
 	return errors.New("Nothing here")
 }
 
 // Create ...
-func (repo *GormRepository) Create(user *user.User) (*user.User, error) {
+func (repo *GormRepository) Create(user *model.User) (*model.User, error) {
 	return nil, errors.New("Nothing here")
 }
 
 // Update ...
-func (repo *GormRepository) Update(user *user.User) error {
+func (repo *GormRepository) Update(user *model.User) error {
 	return errors.New("Nothing here")
 }
