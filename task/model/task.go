@@ -4,6 +4,7 @@ import (
 	"time"
 
 	agent "github.com/jbltx/rlauncher/agent/model"
+	"github.com/jbltx/rlauncher/cfg"
 )
 
 // Status ...
@@ -28,6 +29,7 @@ const (
 
 // Task ...
 type Task struct {
+	cfg.BaseModel
 	TaskID      uint32       `json:"taskID"`
 	Command     string       `json:"command"`
 	Status      Status       `json:"status"`

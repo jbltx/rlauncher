@@ -2,3 +2,4 @@ id_rsa*
 go.sum
 *.exe
 .DS_Store
+*.pb.go

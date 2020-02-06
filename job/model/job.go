@@ -3,6 +3,7 @@ package model
 import (
 	"time"
 
+	"github.com/jbltx/rlauncher/cfg"
 	pool "github.com/jbltx/rlauncher/pool/model"
 	task "github.com/jbltx/rlauncher/task/model"
 	user "github.com/jbltx/rlauncher/user/model"
@@ -10,6 +11,7 @@ import (
 
 // Job ...
 type Job struct {
+	cfg.BaseModel
 	Name            string       `json:"name"`
 	Description     string       `json:"description"`
 	AssignedPools   []*pool.Pool `json:"assignedPools"`

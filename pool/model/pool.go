@@ -1,6 +1,9 @@
 package model
 
-import "golang.org/x/crypto/ssh/agent"
+import (
+	"github.com/jbltx/rlauncher/cfg"
+	"golang.org/x/crypto/ssh/agent"
+)
 
 // Type defines the type of a Pool instance
 type Type uint8
@@ -14,6 +17,7 @@ const (
 
 // Pool ...
 type Pool struct {
+	cfg.BaseModel
 	Name   string         `json:"name"`
 	Type   Type           `json:"type"`
 	Agents []*agent.Agent `json:"agents"`
@@ -31,6 +35,7 @@ const (
 
 // PoolSet ...
 type PoolSet struct {
+	cfg.BaseModel
 	A        *Pool        `json:"a"`
 	B        *Pool        `json:"b"`
 	Relation RelationType `json:"relation"`
