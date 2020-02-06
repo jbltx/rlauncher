@@ -1,31 +1,31 @@
-package user
+package pool
 
 import (
-	"github.com/jbltx/rlauncher/cfg"
-	"github.com/jbltx/rlauncher/user/model"
-	"github.com/jbltx/rlauncher/user/repository"
-
 	"fmt"
+
+	"github.com/jbltx/rlauncher/cfg"
+	"github.com/jbltx/rlauncher/pool/model"
+	"github.com/jbltx/rlauncher/pool/repository"
 )
 
-type userRepository interface {
-	GetByID(uuid string) (*model.User, error)
-	Delete(user *model.User) error
-	Create(user *model.User) (*model.User, error)
-	Update(user *model.User) error
+type poolRepository interface {
+	GetByID(uuid string) (*model.Pool, error)
+	Create(pool *model.Pool) (*model.Pool, error)
+	Update(pool *model.Pool) error
+	Delete(pool *model.Pool) error
 }
 
 // Service ...
 type Service struct {
 	appCfg     *cfg.Config
-	repository userRepository
+	repository poolRepository
 }
 
 // NewService ...
 func NewService(appConfig *cfg.Config) *Service {
 
 	// init repository
-	var repo userRepository
+	var repo poolRepository
 	switch appConfig.Database.Type {
 	case "mysql":
 	case "postgres":

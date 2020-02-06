@@ -1,7 +1,9 @@
 syntax = "proto3";
-package user;
+package jbltx.rlauncher;
+
+option go_package = "github.com/jbltx/rlauncher/user/delivery";
 
 message User {
-    string name = 1;
-    string email = 2;
+    string email = 1;
+    string name = 2;
 }

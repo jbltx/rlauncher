@@ -1,31 +1,33 @@
-package user
+package task
 
 import (
 	"github.com/jbltx/rlauncher/cfg"
-	"github.com/jbltx/rlauncher/user/model"
-	"github.com/jbltx/rlauncher/user/repository"
+	job "github.com/jbltx/rlauncher/job/model"
+	"github.com/jbltx/rlauncher/task/model"
+	"github.com/jbltx/rlauncher/task/repository"
 
 	"fmt"
 )
 
-type userRepository interface {
-	GetByID(uuid string) (*model.User, error)
-	Delete(user *model.User) error
-	Create(user *model.User) (*model.User, error)
-	Update(user *model.User) error
+type taskRepository interface {
+	GetByID(uuid string) (*model.Task, error)
+	GetJob(task *model.Task) (*job.Job, error)
+	Create(task *model.Task) (*model.Task, error)
+	Update(task *model.Task) error
+	Delete(task *model.Task) error
 }
 
 // Service ...
 type Service struct {
 	appCfg     *cfg.Config
-	repository userRepository
+	repository taskRepository
 }
 
 // NewService ...
 func NewService(appConfig *cfg.Config) *Service {
 
 	// init repository
-	var repo userRepository
+	var repo taskRepository
 	switch appConfig.Database.Type {
 	case "mysql":
 	case "postgres":

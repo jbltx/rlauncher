@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"time"
 
 	"github.com/jbltx/rlauncher/auth/provider"
 	"github.com/jbltx/rlauncher/cfg"
@@ -107,5 +108,12 @@ func (svc *Service) Login() {
 		Addr:    fmt.Sprintf(":55789"),
 		Handler: mux,
 	}
-	svc.server.ListenAndServe()
+
+	go func () {
+		svc.server.ListenAndServe()
+	}()
+	
+	select {
+		case <- time.After(time.Second * 60)
+	}
 }
